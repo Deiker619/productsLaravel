@@ -4,7 +4,6 @@ namespace App\Http\Controllers\products;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class productos extends Controller
@@ -15,15 +14,34 @@ class productos extends Controller
         $producto = Product::create($request->all());
 
         return response()->json([
-            'response' => $producto
+            'producto' => $producto
         ], 200);
     }
 
     public function get(Request $request)
     {
         return response()->json(
-            ['users' =>  User::all()],
+            ['products' =>  product::all()],
             200
         );
+    }
+
+    public function getOnlyProduct(Request $request){
+        $product = Product::findOrFail($request->id);
+        return response()->json($product,200);
+    }
+
+    public function update(Request $request){
+        $product = Product::findOrFail($request->id);
+        $product->fill($request->all());
+        $product->save();
+        return response()->json($product, 200);
+
+    }
+
+
+    public function destroy(Request $request){
+       $product = Product::findOrFail($request->id);
+        $product->delete();
     }
 }

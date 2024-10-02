@@ -9,4 +9,11 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = ['nameProduct', 'price', 'category', 'description'];
+
+    public function categories(){
+        return $this->hasMany(Category::class, 'category_id');
+    }
+    public function cart_shopping_item(){
+        return $this->hasMany(CartItems::class, 'product_id');
+    }
 }

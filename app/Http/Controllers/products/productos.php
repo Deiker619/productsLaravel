@@ -13,9 +13,15 @@ class productos extends Controller
     {
         $producto = Product::create($request->all());
 
-        return response()->json([
-            'producto' => $producto
-        ], 200);
+        if($producto){
+            return response()->json([
+                'producto' => $producto
+            ], 200);
+        }else{
+            return response()->json([
+                'producto' => $producto
+            ], 200);
+        }
     }
 
     public function get(Request $request)

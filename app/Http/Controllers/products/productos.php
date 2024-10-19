@@ -11,16 +11,18 @@ class productos extends Controller
     //
     public function store(Request $request)
     {
-        $producto = Product::create($request->all());
-
-        if($producto){
+        try {
+            $producto = Product::create($request->all());
+            if ($producto) {
+                return response()->json([
+                    'producto' => $producto
+                ], 201);
+            } 
+        } catch (\Exception $e) {
+            // Para forzar la respuesta en JSON, independientemente del error
             return response()->json([
-                'producto' => $producto
-            ], 200);
-        }else{
-            return response()->json([
-                'producto' => $producto
-            ], 200);
+                'message' => 'Error en el servidor al crear el producto',
+            ], 500);
         }
     }
 

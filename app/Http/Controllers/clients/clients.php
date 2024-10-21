@@ -15,7 +15,7 @@ class clients extends Controller
 
 
         if (Client::where('cedula', $request->cedula)->exists()) { //El Cliente ya esta registrado
-            $client = Client::where('cedula', $request->cedula)->get();
+            $client = Client::where('cedula', $request->cedula)->first();
             return response()->json([
                 'message' => 'Bienvenido de nuevo',
                 'client' => $client

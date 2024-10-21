@@ -19,11 +19,11 @@ route::get('/product_get/{id}', [productos::class, 'getOnlyProduct']);
 route::delete('/product_destroy/{id}', [productos::class, 'destroy']);
 
 
+
 /* Client */
 route::post('/client_store', [clients::class, 'store']);
 
 Route::group([
-
     'middleware' => 'api',
     'prefix' => 'auth'
 
@@ -34,11 +34,8 @@ Route::group([
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
     Route::post('register', [AuthController::class, 'register']);
+});
 
-    /* Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class,'logout']);
-    Route::post('/refresh', [AuthController::class,'refresh']);
-    Route::post('/me', [AuthController::class,'me']); */
-
-
+Route::group(['middleware' => 'jwt.auth'], function () { // protege las rutas para estar atento de un token valido
+    
 });

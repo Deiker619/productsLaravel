@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
@@ -43,10 +45,6 @@ class AuthController extends Controller
     {
         return response()->json(JWTAuth::user());
     }
-    public function mee()
-    {
-        return response()->json(['message'=> 'prueba']);
-    }
 
     /**
      * Log the user out (Invalidate the token).
@@ -75,7 +73,22 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(JWTAuth::refresh());
+        try {
+            // Refresca el token si todavía es válido
+            $newToken = JWTAuth::refresh(JWTAuth::getToken());
+    
+            return response()->json([
+                'token' => $newToken,
+                'message' => 'Token refrescado con éxito'
+            ], 200);
+        } catch (TokenExpiredException $e) {
+            // Si el token ha expirado, no puede ser refrescado
+            return response()->json(['error' => 'No se puede refrescar, token expirado'], 401);
+        } catch (JWTException $e) {
+            // Si hay otro problema con el token
+            return response()->json(['error' => 'Error al refrescar el token'], 500);
+        }
+        
 
     }
 

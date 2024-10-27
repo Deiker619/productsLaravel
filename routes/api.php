@@ -6,6 +6,7 @@ use App\Http\Controllers\products\productos;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,6 +18,7 @@ route::get('/product_get', [productos::class, 'get']);
 route::put('/product_update/{id}', [productos::class, 'update']);
 route::get('/product_get/{id}', [productos::class, 'getOnlyProduct']);
 route::delete('/product_destroy/{id}', [productos::class, 'destroy']);
+
 
 
 
@@ -39,3 +41,16 @@ Route::group([
 Route::group(['middleware' => 'jwt.auth'], function () { // protege las rutas para estar atento de un token valido
     
 });
+
+
+/* FACTURA */
+route::get('/pdf', function (){
+    $data = User::all();
+    $datos = [
+        'data' => $data
+    ];
+    $pdf = Pdf::loadView('pdf.invoice');
+    /* $pdf->setPaper('letter', 'portrait'); */ 
+    $pdf->setPaper([0, 0, 226, 841]); //Formato para factura
+     return $pdf->stream('archivo.pdf', ["Attachment" => false]); 
+ });

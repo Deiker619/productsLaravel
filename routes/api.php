@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Js;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -44,13 +45,17 @@ Route::group(['middleware' => 'jwt.auth'], function () { // protege las rutas pa
 
 
 /* FACTURA */
-route::get('/pdf', function (){
-    $data = User::all();
+route::post('/pdf', function (Request $request){
+   /*  $data = User::all(); */
+
     $datos = [
-        'data' => $data
+    'client' => $request->input('client'),
+     'cart' =>$request->input('cart')
     ];
-    $pdf = Pdf::loadView('pdf.invoice');
-    /* $pdf->setPaper('letter', 'portrait'); */ 
+    
+    $pdf = Pdf::loadView('pdf.invoice', $datos);
+    $pdf->setPaper('letter', 'portrait'); 
     $pdf->setPaper([0, 0, 226, 841]); //Formato para factura
-     return $pdf->stream('archivo.pdf', ["Attachment" => false]); 
+     return $pdf->stream('archivo.pdf', ["Attachment" => true]); 
+     /* return response()->json(['message'=>'hola', 'datos' => $datos],200); */
  });

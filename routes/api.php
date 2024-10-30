@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\clients\clients;
 use App\Http\Controllers\products\productos;
+use App\Http\Controllers\sales\sales;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,8 @@ use Illuminate\Support\Js;
 Route::get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/services', [sales::class, 'show']);
 
 /* Product */
 route::post('/product_store', [productos::class, 'store']);

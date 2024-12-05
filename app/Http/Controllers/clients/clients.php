@@ -4,7 +4,6 @@ namespace App\Http\Controllers\clients;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
-
 use App\Services\ClientService;
 use Illuminate\Http\Request;
 
@@ -18,6 +17,13 @@ class clients extends Controller
 
         $this->clientService = $clientService;
     }
+
+    public function get(Request $request){
+        $clients = $this->clientService->get($request);
+
+        return $clients;
+    }
+
 
     public function store(Request $request)
     {

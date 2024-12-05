@@ -12,6 +12,9 @@ class ClientService{
         $this->cartService = $cartService;
     }
 
+    public function get(Request $request){
+        return Client::all();
+    }
     
     public function newOrOldClient(Request $request){
         if (Client::where('cedula', $request->cedula)->exists()) { //El Cliente ya esta registrado

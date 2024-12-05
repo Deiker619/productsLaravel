@@ -1,5 +1,5 @@
 <div>
-    <h1>factura</h1>
+    <h1>Factura</h1>
     <div style="text-align: center">
 
       <p>Nombre empresa: </p>
@@ -19,16 +19,16 @@
         <tbody>
             @foreach ($cart as $item)
                 <tr>
-                    <td>{{$item['nameProduct']}}</td>
-                    <td>{{$item['cantidad']}}</td>
+                    <td >{{$item['nameProduct']}}</td>
+                    <td style="text-align: center"> {{$item['cantidad']}}</td>
                     <td>{{$item['price']}}</td>
-                  
+                    
 
                 </tr>
             @endforeach
         </tbody>
-        <hr>
-        <p>Total: </p>
     </table>
+    <hr style="width: 100%">
+    <p>Total: </p>
 
 </div>

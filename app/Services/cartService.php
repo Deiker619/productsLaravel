@@ -20,8 +20,17 @@ class CartService{
         return $cart;
     }
 
-    public function addProductsOfCart(Request $request){
-        
+    public function addProductsOfCart(array $datos){ //Agrega los productos en cartitems
+        foreach ($datos['cart'] as $key => $value) {
+          $prueba =  CartItems::create([
+                'cart_shopping_id' => $datos['dateOfCart']['id'],
+                'product_id' => $value['id'],
+                'cantidad' => $value['cantidad']
+            ]);
+        }
+       
+
+
 
     }
 }

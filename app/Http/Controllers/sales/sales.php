@@ -33,8 +33,13 @@ class sales extends Controller
     {
         $datos = [
             'client' => $request->input('client'),
-            'cart' => $request->input('cart')
+            'cart' => $request->input('cart'),
+            'dateOfCart' => $request->input('datesOfCart')
         ];
+
+        $this->cartService->addProductsOfCart($datos);
+
+        return response()->json($datos, 200);
 
         
 

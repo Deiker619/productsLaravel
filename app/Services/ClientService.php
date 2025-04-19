@@ -28,7 +28,8 @@ class ClientService{
             $cart = $this->cartService->createNewCart($client->id); //Crea el carrito de compra
             return response()->json([
                 'message' => 'Registro exitoso',
-                'client' => $client
+                'client' => $client,
+                'cart' => $cart
             ]);
         } 
 

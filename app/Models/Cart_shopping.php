@@ -9,7 +9,7 @@ class Cart_shopping extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_id', 'products', 'description'];
+    protected $fillable = ['client_id','description'];
 
     public function client(){
         return $this->belongsTo(Client::class, 'client_id');

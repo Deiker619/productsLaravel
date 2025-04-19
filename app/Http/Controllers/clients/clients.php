@@ -4,29 +4,27 @@ namespace App\Http\Controllers\clients;
 
 use App\Http\Controllers\Controller;
 use App\Models\Client;
+
+use App\Services\ClientService;
 use Illuminate\Http\Request;
 
 class clients extends Controller
 {
-    //
+    protected $clientService;
+
+
+    public function __construct(ClientService $clientService)
+    {
+
+        $this->clientService = $clientService;
+    }
 
     public function store(Request $request)
     {
 
-
-        if (Client::where('cedula', $request->cedula)->exists()) { //El Cliente ya esta registrado
-            $client = Client::where('cedula', $request->cedula)->get();
-            return response()->json([
-                'message' => 'Bienvenido de nuevo',
-                'client' => $client
-            ]);
-        } else {
-            $client = Client::create($request->all());
-            return response()->json([
-                'message' => 'Registro exitoso',
-                'client' => $client
-            ]);
-        } 
+        $cliente = $this->clientService->newOrOldClient($request);
+        return $cliente;
+        
     }
 
     public function destroy(Request $request)

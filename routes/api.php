@@ -4,12 +4,21 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\clients\clients;
 use App\Http\Controllers\products\productos;
 use App\Http\Controllers\sales\sales;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $data = [
+        'users' => User::limit(1)->get(),
+        'ip' => $request->ip(),
+        'path' => $request->path(),
+        'navegador' => $request->header('User-Agent'),
+        'getAcceptableContentTypes' => $request->getAcceptableContentTypes(),
+        'isSecure' => $request->isSecure(),
+    ];
+    return response()->json($data);
 });
 
 Route::get('/services', [sales::class, 'show']);
@@ -41,23 +50,23 @@ Route::group([
 });
 
 Route::group(['middleware' => 'jwt.auth'], function () { // protege las rutas para estar atento de un token valido
-    
+
 });
 
 
 /* FACTURA */
-route::post('/pdf', function (Request $request){
+route::post('/pdf', function (Request $request) {
 
 
     $datos = [
-    'client' => $request->input('client'),
-     'cart' =>$request->input('cart')
+        'client' => $request->input('client'),
+        'cart' => $request->input('cart')
     ];
-    
-    $pdf = Pdf::loadView('pdf.invoice', $datos);
-    $pdf->setPaper('letter', 'portrait'); 
-    $pdf->setPaper([0, 0, 226, 841]); //Formato para factura
-     return $pdf->stream('archivo.pdf', ["Attachment" => true]); 
- });
 
- route::post('/payment', [sales::class, 'store']);
+    $pdf = Pdf::loadView('pdf.invoice', $datos);
+    $pdf->setPaper('letter', 'portrait');
+    $pdf->setPaper([0, 0, 226, 841]); //Formato para factura
+    return $pdf->stream('archivo.pdf', ["Attachment" => true]);
+});
+
+route::post('/payment', [sales::class, 'store']);
